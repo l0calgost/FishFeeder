@@ -1,28 +1,30 @@
 #include <Arduino.h>
 
-#include <Servo.h>
+#define SECOND 1000L
+#define MINUTE (60*SECOND)
+#define HOUR (60*MINUTE)
+#define DAY (24*HOUR)
 
-Servo servo;
+int motorPin1=2;
 
-int start_position = 50;
-int servoPin = 2;
-int lastExecution = 0;
-int period = 10000;
+void motorStop();
 
-void setup() {
+void setup(){
+  pinMode(motorPin1,OUTPUT);
   Serial.begin(9600);
-  servo.write(start_position);
-  servo.attach(servoPin);
+  delay(SECOND * 2);
 }
 
-void loop() {
-  int now = millis();
-  if (now - lastExecution > period) {
-    Serial.println(now);
-    Serial.println("Feeding...");
-    servo.write(20);
-    delay(200);
-    servo.write(start_position);
-    lastExecution = now;
-  }  
+void motorStop(){
+  digitalWrite(motorPin1,LOW);
+  Serial.println("Stopped motor");
+  delay(DAY);
+}
+
+void loop(){
+  digitalWrite(motorPin1,HIGH);
+  Serial.println("Started motor");
+  delay(2700); // 2 rounds
+  // delay(1400); // 1 round
+  motorStop();
 }
